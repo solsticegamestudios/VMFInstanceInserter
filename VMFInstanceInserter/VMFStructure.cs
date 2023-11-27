@@ -176,7 +176,11 @@ namespace VMFInstanceInserter
 
                     // Don't rotate angles for brush entities
                     if (match.Groups["classType"].Value.Equals("SolidClass", StringComparison.InvariantCultureIgnoreCase)) {
-                        curDict.Add("angles", TransformType.None);
+                        if (!curDict.ContainsKey("angles")) {
+                            curDict.Add("angles", TransformType.None);
+                        } else {
+                            curDict["angles"] = TransformType.None;
+                        }
                     }
 
                     var basesMatch = _sBaseDefRegex.Match(line);
@@ -295,9 +299,9 @@ namespace VMFInstanceInserter
 
             switch (fixupStyle) {
                 case TargetNameFixupStyle.Postfix:
-                    return name + targetName;
+                    return name + "-" + targetName;
                 case TargetNameFixupStyle.Prefix:
-                    return targetName + name;
+                    return targetName + "-" + name;
                 default:
                     return name;
             }
